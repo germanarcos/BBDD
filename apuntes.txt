@@ -1,0 +1,4 @@
+Normalización
+	1FN		Una base de datos está en primera forma normal si está sin atributos multievaluados.
+	2FN		Una base de datos está en segunda forma normal si está en 1FN y no hay atributos/columnas/campos que dependen parcialmente de la clave
+	3FN		Una base de datos está en tercera forma normal si está en 1FN y en 2FN y no hay atributos que dependen de otros atributos que no son clave
