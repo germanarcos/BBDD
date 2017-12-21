@@ -1,0 +1,276 @@
+drop table pedidos cascade constraints;
+drop table clientes cascade constraints;
+drop table productos cascade constraints;
+drop table empleados cascade constraints;
+drop table oficinas cascade constraints;
+
+--------------------------------------------------------
+--  DDL for Table CLIENTES
+--------------------------------------------------------
+
+  CREATE TABLE CLIENTES 
+   (	NUMCLIE NUMBER, 
+	NOMBRE VARCHAR2(30), 
+	REPCLIE NUMBER, 
+	LIMITECREDITO NUMBER
+   ) ;
+--------------------------------------------------------
+--  DDL for Table EMPLEADOS
+--------------------------------------------------------
+
+  CREATE TABLE   EMPLEADOS 
+   (	NUMEMP NUMBER, 
+	NOMBRE VARCHAR2(100), 
+	EDAD NUMBER, 
+	OFICINA NUMBER, 
+	TITULO VARCHAR2(20), 
+	CONTRATO DATE, 
+	JEFE NUMBER, 
+	CUOTA NUMBER, 
+	VENTAS NUMBER
+   ) ;
+--------------------------------------------------------
+--  DDL for Table PEDIDOS
+--------------------------------------------------------
+
+  CREATE TABLE   PEDIDOS 
+   (	CODIGO NUMBER, 
+	NUMPEDIDO NUMBER, 
+	FECHAPEDIDO DATE, 
+	CLIE NUMBER, 
+	REP NUMBER, 
+	FAB CHAR(10), 
+	PRODUCTO CHAR(10), 
+	CANT NUMBER, 
+	IMPORTE NUMBER
+   ) ;
+--------------------------------------------------------
+--  DDL for Table PRODUCTOS
+--------------------------------------------------------
+
+  CREATE TABLE   PRODUCTOS 
+   (	IDFAB CHAR(10), 
+	IDPRODUCTO CHAR(10), 
+	DESCRIPCION VARCHAR2(20), 
+	PRECIO NUMBER, 
+	EXISTENCIAS NUMBER
+   ) ;
+--------------------------------------------------------
+--  DDL for Table OFICINAS
+--------------------------------------------------------
+
+  CREATE TABLE   OFICINAS 
+   (	OFICINA NUMBER, 
+	CIUDAD VARCHAR2(20), 
+	REGION VARCHAR2(20), 
+	DIR NUMBER, 
+	OBJETIVO NUMBER, 
+	VENTAS NUMBER
+   ) ;
+
+---------------------------------------------------
+--   DATA FOR TABLE EMPLEADOS
+--   FILTER = none used
+---------------------------------------------------
+REM INSERTING into EMPLEADOS
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (106,'Luis Antonio',52,11,'dir general',to_timestamp('14/06/88 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),null,1500,1800);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (108,'Ana Bustamante',62,21,'dir ventas',to_timestamp('12/10/89 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),106,2100,2200);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (109,'María Sunta',31,11,'representante',to_timestamp('12/10/99 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),106,1800,2400);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (101,'Antonio Viguer',45,12,'representante',to_timestamp('20/10/86 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),104,1800,2000);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (102,'Alvaro Jaumes',48,21,'representante',to_timestamp('10/12/86 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),108,2300,3500);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (103,'Juan Rovira',29,12,'representante',to_timestamp('01/03/87 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),104,1500,1600);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (104,'José Gonzalez',33,12,'dir ventas',to_timestamp('20/10/87 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),106,1200,900);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (105,'Vicente Pantalla',37,13,'representante',to_timestamp('12/02/88 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),104,2100,2200);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (107,'Jorge Gutierrez',49,22,'representante',to_timestamp('14/11/88 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),108,1800,1100);
+Insert into EMPLEADOS (NUMEMP,NOMBRE,EDAD,OFICINA,TITULO,CONTRATO,JEFE,CUOTA,VENTAS) values (110,'Juan Victor',41,null,'representante',to_timestamp('13/01/90 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),104,null,500);
+
+---------------------------------------------------
+--   END DATA FOR TABLE EMPLEADOS
+---------------------------------------------------
+
+---------------------------------------------------
+--   DATA FOR TABLE CLIENTES
+--   FILTER = none used
+---------------------------------------------------
+REM INSERTING into CLIENTES
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2101,'Luis García Antón',106,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2102,'Alvaro Rodriguez',101,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2103,'Jaime Llorens',105,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2105,'Antonio Canales',101,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2106,'Juan Suárez',102,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2107,'Juan López',110,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2108,'Julia Antequera',109,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2109,'Alberto Juanes',103,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2111,'Cristobal García',103,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2112,'María Silva',108,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2113,'Luisa Maron',104,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2114,'Cristina Bulini',102,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2115,'Vicente Martínez',101,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2117,'Carlos Tena',106,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2118,'Junípero Alvarez',108,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2119,'Salomón Bueno',109,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2120,'Juan Malo',102,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2121,'Vicente Ríos',103,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2122,'José Marchante',105,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2123,'José Libros ',102,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2124,'Juan Bolto',107,600);
+Insert into CLIENTES (NUMCLIE,NOMBRE,REPCLIE,LIMITECREDITO) values (2125,'Berta Besteiro',null,600);
+
+---------------------------------------------------
+--   END DATA FOR TABLE CLIENTES
+---------------------------------------------------
+
+---------------------------------------------------
+--   DATA FOR TABLE PRODUCTOS
+--   FILTER = none used
+---------------------------------------------------
+REM INSERTING into PRODUCTOS
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','41001','arandela',1,277);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','41002','bisagra',1.2,167);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','41003','art t3',1.5,207);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','41004','art 14',1.6,139);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','4100x','junta',0.3,37);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','4100y','extractor',15,25);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('aci','4100z','cont',14,28);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('bic','41003','manivela',4,3);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('bic','41089','rodamiento',1.5,78);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('bic','41672','plato',1.2,0);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('fea','112','cubo',1.5,115);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','773c','reostato',5.99,28);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','775c','reostato 2',9,5);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','779c','reostato 3',10.99,0);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','887h','caja clavos',0.4,223);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','887p','perno',0.15,24);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('imm','887x','manivela',2.8,32);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('qsa','xk47','red',2.2,38);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('rei','2a44g','pas',2.3,14);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('rei','2a44l','bomba l',27,12);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('rei','2a44r','bomba r',27,12);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('rei','2a45c','junta',0.5,10);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('fea','114','cubo',1.8,15);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('qsa','xk48','red',0.9,203);
+Insert into PRODUCTOS (IDFAB,IDPRODUCTO,DESCRIPCION,PRECIO,EXISTENCIAS) values ('qsa','xk48a','red',0.75,37);
+
+---------------------------------------------------
+--   END DATA FOR TABLE PRODUCTOS
+---------------------------------------------------
+
+---------------------------------------------------
+--   DATA FOR TABLE OFICINAS
+--   FILTER = none used
+---------------------------------------------------
+REM INSERTING into OFICINAS
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (11,'Valencia','este',106,3500,4000);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (12,'Alicante','este',104,4800,4200);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (13,'Castellon','este',105,2100,2160);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (21,'Badajoz','oeste',108,1800,1180);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (22,'A Coruña','oeste',108,null,null);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (23,'Madrid','centro',108,null,null);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (24,'Madrid','centro',108,1500,900);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (26,'Pamplona','norte',null,null,null);
+Insert into OFICINAS (OFICINA,CIUDAD,REGION,DIR,OBJETIVO,VENTAS) values (28,'Valencia','este',null,5400,0);
+
+---------------------------------------------------
+--   END DATA FOR TABLE OFICINAS
+---------------------------------------------------
+
+---------------------------------------------------
+--   DATA FOR TABLE PEDIDOS
+--   FILTER = none used
+---------------------------------------------------
+REM INSERTING into PEDIDOS
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (2,110036,to_timestamp('02/01/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2117,106,'rei','2a44l',7,189);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (3,112963,to_timestamp('10/05/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2103,105,'aci','41004',28,19.7);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (4,112968,to_timestamp('11/01/10 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2102,101,'aci','41004',34,24);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (5,112975,to_timestamp('11/02/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2111,103,'rei','2a44g',6,13);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (6,112979,to_timestamp('12/10/09 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2114,108,'aci','4100z',6,90);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (7,112983,to_timestamp('10/05/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2103,105,'aci','41004',6,5);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (8,112987,to_timestamp('01/01/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2103,105,'aci','4100y',11,165);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (9,112989,to_timestamp('10/12/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2101,106,'fea','114',6,9);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (10,112992,to_timestamp('15/04/10 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2118,108,'aci','41002',10,4.5);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (11,112993,to_timestamp('10/03/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2106,102,'rei','2a45c',24,11.4);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (12,112997,to_timestamp('04/04/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2124,107,'bic','41003',1,4);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (13,113003,to_timestamp('05/02/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2108,109,'imm','779c',3,33.5);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (14,113007,to_timestamp('01/01/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2112,108,'imm','773c',3,18);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (15,113012,to_timestamp('05/05/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2111,105,'aci','41003',35,22);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (16,113013,to_timestamp('06/08/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2118,108,'bic','41003',1,4);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (17,113024,to_timestamp('04/07/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2114,108,'qsa','xk47',20,48);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (18,113027,to_timestamp('02/02/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2103,105,'aci','41002',54,24);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (19,113034,to_timestamp('05/11/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2107,110,'rei','2a45c',8,4);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (20,113042,to_timestamp('01/01/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2113,101,'rei','2a44r',5,135);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (21,113045,to_timestamp('02/07/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2112,108,'rei','2a44r',10,270);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (22,113048,to_timestamp('02/02/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2120,102,'imm','779c',2,22);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (23,113049,to_timestamp('04/04/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2118,108,'qsa','xk47',2,4.4);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (24,113051,to_timestamp('06/07/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2118,108,'qsa','xk47',4,8.8);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (25,113055,to_timestamp('01/04/09 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2108,101,'aci','4100x',6,1.8);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (26,113057,to_timestamp('01/11/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2111,103,'aci','4100x',24,7.2);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (27,113058,to_timestamp('04/07/99 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2108,109,'fea','112',10,15);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (28,113062,to_timestamp('04/07/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2124,107,'bic','41003',10,14);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (29,113065,to_timestamp('03/07/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2106,102,'qsa','xk47',6,13);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (30,113069,to_timestamp('01/08/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2109,107,'imm','773c',22,186);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (1,110036,to_timestamp('02/01/07 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2107,110,'aci','4100z',9,135);
+Insert into PEDIDOS (CODIGO,NUMPEDIDO,FECHAPEDIDO,CLIE,REP,FAB,PRODUCTO,CANT,IMPORTE) values (31,113070,to_timestamp('15/03/11 00:00:00,000000000','DD/MM/RR HH24:MI:SS,FF'),2107,110,'aci','41004',5,165);
+
+---------------------------------------------------
+--   END DATA FOR TABLE PEDIDOS
+---------------------------------------------------
+--------------------------------------------------------
+--  Constraints for Table CLIENTES
+--------------------------------------------------------
+
+  ALTER TABLE CLIENTES ADD PRIMARY KEY (NUMCLIE) ENABLE;
+--------------------------------------------------------
+--  Constraints for Table EMPLEADOS
+--------------------------------------------------------
+
+  ALTER TABLE EMPLEADOS ADD PRIMARY KEY (NUMEMP) ENABLE;
+ 
+  ALTER TABLE EMPLEADOS ADD UNIQUE (NOMBRE) ENABLE;
+--------------------------------------------------------
+--  Constraints for Table PEDIDOS
+--------------------------------------------------------
+
+  ALTER TABLE PEDIDOS ADD PRIMARY KEY (CODIGO) ENABLE;
+--------------------------------------------------------
+--  Constraints for Table PRODUCTOS
+--------------------------------------------------------
+
+  ALTER TABLE PRODUCTOS ADD CONSTRAINT PK_PRODUCTOS PRIMARY KEY (IDFAB, IDPRODUCTO) ENABLE;
+
+
+
+--------------------------------------------------------
+--  Ref Constraints for Table CLIENTES
+--------------------------------------------------------
+
+  ALTER TABLE CLIENTES ADD CONSTRAINT FK_REPCLIE_NUMEMP FOREIGN KEY (REPCLIE)
+	  REFERENCES EMPLEADOS (NUMEMP) ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table EMPLEADOS
+--------------------------------------------------------
+ALTER TABLE OFICINAS ADD CONSTRAINT PK_OFIC PRIMARY KEY (OFICINA);
+
+  ALTER TABLE EMPLEADOS ADD CONSTRAINT FK_EMPL_OFIC FOREIGN KEY (OFICINA)
+	  REFERENCES OFICINAS (OFICINA) ENABLE;
+ 
+  ALTER TABLE EMPLEADOS ADD FOREIGN KEY (JEFE)
+	  REFERENCES EMPLEADOS (NUMEMP) ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table PEDIDOS
+--------------------------------------------------------
+
+  ALTER TABLE PEDIDOS ADD CONSTRAINT FK_CLIENTES FOREIGN KEY (CLIE)
+	  REFERENCES CLIENTES (NUMCLIE) ENABLE;
+ 
+  ALTER TABLE PEDIDOS ADD CONSTRAINT FK_EMPLEADO FOREIGN KEY (REP)
+	  REFERENCES EMPLEADOS (NUMEMP) ENABLE;
+ 
+  ALTER TABLE PEDIDOS ADD CONSTRAINT FK_PRODUCTOS FOREIGN KEY (FAB, PRODUCTO)
+	  REFERENCES PRODUCTOS (IDFAB, IDPRODUCTO) ENABLE;
+
+--------------------------------------------------------
+--  Ref Constraints for Table OFICINAS
+--------------------------------------------------------
+
+  ALTER TABLE OFICINAS ADD CONSTRAINT FK_OFICINAS_EMPLEADOS FOREIGN KEY (DIR)
+	  REFERENCES EMPLEADOS (NUMEMP) ENABLE;
