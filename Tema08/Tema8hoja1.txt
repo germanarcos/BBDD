@@ -1,0 +1,41 @@
+42. 
+select employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, round(commission_pct,1) as "commission_pct", manager_id, department_id
+from employees
+where department_id = 80;
+
+43.
+select SQRT(49) "Square root" FROM DUAL;
+
+44.
+select SQRT(36)+ABS(-9) "Square root" FROM DUAL;
+
+45.
+select upper(JOB_TITLE) 
+from jobs 
+where job_id in 
+(select job_id from employees 
+where department_id in 
+(select department_id 
+from departments where department_name='Accounting'));
+
+46.
+select upper(first_name) || ' '|| upper(last_name) from employees order by last_name, first_name;
+
+47.
+select * from employees where length(first_name)>5;
+
+48.
+select * from employees where manager_id is not null and manager_id in 
+(select employee_id from employees where department_id is not null and department_id in 
+(select department_id from departments where length(department_name)>10));
+
+49.
+select replace(first_name,'b','v') from employees where first_name like 'A%';
+
+50.
+select first_name as nombre, NVL(to_char(commission_pct), 'sin comisión') as comision from employees where department_id in (select department_id from departments where upper(department_name) in ('MARKETING', 'SALES'));
+
+51.
+select first_name, last_name, round(months_between(job_history.end_date,employees.hire_date)/12,1) as "Diferencia en años" from employees, job_history where employees.employee_id = job_history.employee_id;
+
+52.

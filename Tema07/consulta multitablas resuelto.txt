@@ -1,0 +1,24 @@
+12. select * from departments, locations where locations.location_id = departments.location_id;
+
+13. select department_name, first_name, last_name from departments, employees where employees.department_id = departments.department_id;
+
+14. select distinct employees.department_id, department_name from employees, departments where employees.department_id = departments.department_id;
+
+15. select employee_id, last_name, department_id, employees.job_id, job_title from employees, jobs where department_id=80;
+
+16. select last_name, jobs.job_title from employees, jobs where employees.job_id != 'SA_MAN';
+
+17.	select department_id, department_name, city, country_name from departments, locations, countries where departments.location_id = locations.location_id and locations.country_id = countries.country_id;
+
+18.	select last_name, job_title, department_name from employees,departments,jobs where (employees.department_id = departments.department_id and employees.job_id = jobs.job_id and last_name like 'A_____%'); 
+
+19. select j.last_name from employees e, employees j where e.employee_id = j.manager_id and e.job_id = j.job_id;
+
+20. (select jef.last_name as "Apellido Jefe", tra.last_name as "Apellido trabajador" from employees tra, employees jef where tra.employee_id = jef.manager_id) order by (jef.last_name); 
+
+21.
+subconsulta:
+(select first_name, last_name from employees where department_id > (select department_id from departments where DEPARTMENT_NAME = 'Marketing')) order by last_name;
+
+multitabla:
+(select first_name, last_name from employees, departments where employees.department_id > departments.department_id and departments.department_name = 'Marketing') order by employees.last_name;

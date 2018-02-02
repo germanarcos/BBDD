@@ -1,0 +1,57 @@
+1. CREATE TABLE EMPLEADOS3 AS (SELECT * FROM EMPLOYEES WHERE DEPARTMENT_ID = 100);
+
+2. CREATE TABLE DEPARTAMENTOS2 AS (SELECT * FROM departments);
+No tiene clave primaria
+
+3.  alter table empleados3 add hobby varchar(40)
+	alter table empleados3 add NHIJOS number(2)
+
+4.  alter table empleados3 add EDAD number(3) not null
+	porque necesita un valor predefinido
+
+5.  alter table empleados3 add EDAD number(3) default 0 not null;
+
+6. 	alter table empleados3 drop column edad;
+   	alter table empleados3 drop column nhijos;
+
+7. 	alter table empleados3 modify hobby varchar(30);
+
+8. 	alter table empleados3 modify first_name varchar (5);
+No se puede modificar porque existen valores de más de 5 carácteres.
+
+9.	alter table empleados3 modify employee_id number (5);
+No se puede modificar porque para disminuir la precisión la columna tiene que estar vacía.
+	alter table empleados3 modify employee_id number (8);
+
+10.	alter table DEPARTMENTS drop column DEPARTMENT_ID;
+No se puede eliminar porque es clave foránea de otra tabla y existe una restricción que lo impide.
+
+11.	ALTER TABLE empleados3 ADD CONSTRAINT PK_Emple3 PRIMARY KEY(employee_id);
+
+12.	ALTER TABLE empleados3 ADD CONSTRAINT salario check(salary > 1000 and salary <20000);
+
+13.	CREATE TABLE departamentos AS (SELECT * FROM departments);
+
+14.	INSERT into departamentos values (10,'Admin',203,1700);
+
+15.	alter table departamentos add constraint DEP_PRIMARIA PRIMARY KEY (department_id);
+No permite que sea la clave primaria porque tiene valores nulos o duplicados
+
+16.	alter table empleados3 add constraint COM_COSNTR check (COMMISSION_PCT<=5);
+
+17.	UPDATE empleados3
+	SET COMMISSION_PCT=2;
+
+18. alter table empleados3 add constraint fk_emple3 foreign key (department_id) references departments on delete cascade;
+
+19. create table tiendas (
+  		NIF CHAR(9) not null, 
+  		NOMBRE varchar(25) not null, 
+  		DIRECCIÓN varchar(30),
+  		POBLACIÓN varchar (15), 
+  		CIUDAD varchar(10), 
+  		PROVINCIA varchar(15), 
+  		CODPOSTAL numeric(5),
+  		constraint DNI primary key (NIF));
+
+	alter table tiendas add constraint ciudad_nombres check(ciudad='Zaragoza' or ciudad='Teruel' or ciudad='Huesca');

@@ -1,0 +1,8 @@
+SELECT ROWNUM, precio_venta, nombre FROM productos;
+
+SELECT ROWNUM AS ranking, precio_venta, nombre
+FROM (SELECT precio_venta, nombre FROM productos ORDER BY precio_venta DESC);
+
+SELECT ROWNUM AS ranking, precio_venta, nombre
+FROM (SELECT precio_venta, nombre FROM productos ORDER BY precio_venta DESC)
+where ROWNUM<=3;

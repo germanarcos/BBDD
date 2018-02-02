@@ -1,0 +1,163 @@
+1.
+select nombre from proveedores;
+
+2.
+select nombre, precio_venta from productos;
+
+3.
+select unique provincia from clientes;
+
+4.
+select * from empleados;
+
+5.
+(select nombre, ciudad from proveedores)order by nombre;
+
+6.
+select pag_web ||' es la pagina web de ' || nombre as " " from proveedores where pag_web is not null;
+
+7.
+select numero_pedido, (fecha_envio - fecha_pedido) from pedidos;
+
+8.
+select nombre, precio_venta,stock,(precio_venta*stock) as "Valor de inventario" from productos;
+
+9.
+select nombre, precio_venta,(0.95*precio_venta) as "Precio Reducido" from productos;
+
+10.
+(select * from pedidos)order by ID_cliente,fecha_pedido desc;
+
+11.
+(select nombre, direccion from proveedores) order by nombre;
+
+12.
+select nombre, apellidos from clientes where upper(apellidos) = 'SANZ';
+
+13.
+select nombre from clientes where upper(provincia) = 'MADRID';
+
+14.
+select nombre, apellidos from clientes where upper(provincia) = 'MADRID';
+select nombre, apellidos from clientes where upper(ciudad) = 'BELMONTE';
+select nombre, apellidos from clientes where cod_postal = 45915;
+select nombre, apellidos from clientes where id_cliente in (select id_cliente from pedidos where to_char(fecha_pedido) like '___05%');
+
+15.
+select numero_pedido from pedidos where fecha_pedido > fecha_envio;
+no hay ninguno
+
+16.
+select nombre, apellidos from clientes where upper(apellidos) like 'PE%';
+
+17.
+select nombre, direccion from proveedores where direccion like '%del%';
+
+18.
+select nombre, apellidos from clientes where upper(ciudad) = 'SOMOSIERRA' and upper(apellidos) like 'S%';
+
+19.
+select nombre, apellidos from clientes where upper(ciudad) = 'SOMOSIERRA' or upper(provincia) = 'ORENSE';
+
+20.
+select nombre, telefono from proveedores where upper(provincia) = 'MADRID' or upper(provincia) = 'CACERES';
+
+21.
+select * from pedidos where id_cliente = 1001 and fecha_pedido = fecha_envio;
+
+22.
+(select * from pedidos where id_cliente=1001 or (fecha_pedido = fecha_envio-4))order by id_cliente;
+
+23.
+select nombre, apellidos, provincia, cod_postal from clientes where (upper(apellidos) = 'PELAYO' and upper(provincia)='CACERES')or
+cod_postal like '%9' ;
+
+24.
+select nombre, apellidos, provincia, cod_postal from clientes where (upper(apellidos) = 'PELAYO' or upper(provincia)='CACERES')or
+cod_postal like '%9' ;
+
+25.
+select * from proveedores where upper(provincia)='CACERES' or upper(provincia)='MADRID' or upper(provincia)='ORENSE';
+
+26.
+select * from clientes where upper(apellidos) like 'H%';
+
+27.
+select * from clientes where upper(ciudad) != 'ROBLEDO' and upper(ciudad) != 'SOMOSIERRA';
+
+28.
+(select numero_pedido, id_cliente, fecha_pedido from pedidos where id_cliente=1001) order by fecha_pedido;
+
+29.
+select * from productos where upper(nombre) like 'DOG%';
+
+30.
+select nombre from proveedores where upper(ciudad)='BATRES' or upper(ciudad)='BELMONTE' or upper(ciudad)='ROBLEDO';
+
+31.
+(select nombre from productos where precio_venta >= 125.00)order by nombre;
+
+32.
+select * from proveedores where pag_web is null order by nombre;
+
+33.
+Consulta multitabla
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido 
+where detalles_pedidos.numero_producto in (1,2,6,11) intersect
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido
+where detalles_pedidos.numero_producto in (10,25,26);
+
+Subconsulta
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido 
+where detalles_pedidos.numero_producto in (1,2,6,11) and pedidos.numero_pedido in (
+select  pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido
+where detalles_pedidos.numero_producto in (10,25,26));
+
+34.
+Consulta multitabla
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido
+where detalles_pedidos.numero_producto in (1,2,6,11) and pedidos.numero_pedido not in
+(select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido
+where detalles_pedidos.numero_producto in (10,25,26));
+
+subconsulta
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido 
+where detalles_pedidos.numero_producto in (1,2,6,11) and pedidos.numero_pedido not in (
+select  pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido
+where detalles_pedidos.numero_producto in (10,25,26));
+
+
+
+35.
+
+subconsulta
+select distinct pedidos.numero_pedido 
+from pedidos inner join detalles_pedidos on 
+pedidos.numero_pedido = detalles_pedidos.numero_pedido 
+where detalles_pedidos.numero_producto in (1,2,6,11) or detalles_pedidos.numero_producto in (10,25,26);
+
+
+36.
+select empleados.nombre, empleados.apellidos, clientes.nombre, clientes.apellidos from empleados, clientes where empleados.nombre in clientes.nombre
+
+37.
+select clientes.nombre, clientes.apellidos from empleados, clientes where empleados.nombre not in clientes.nombre
+
+38.
+select unique clientes.ciudad from empleados, clientes where clientes.ciudad not in empleados.ciudad;

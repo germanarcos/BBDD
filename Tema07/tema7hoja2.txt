@@ -1,0 +1,64 @@
+39.
+select distinct numero_pedido 
+                      from detalles_pedidos 
+                      where numero_producto > (select numero_producto
+                                               from productos
+                                               where nombre = 'Shinoman 105 SC Frenos');
+
+
+40.
+select distinct proveedores.nombre 
+from proveedores inner join productos_proveedores on productos_proveedores.id_prov = proveedores.id_prov 
+inner join productos on productos_proveedores.numero_producto = productos.numero_producto
+where productos.nombre like 'C%' and productos.numero_producto in (select detalles_pedidos.numero_producto
+from detalles_pedidos
+where numero_pedido in (select numero_pedido from pedidos where fecha_envio <  to_date('01/03/08', 'dd/mm/yy') and fecha_envio is not null));
+
+41.
+Select distinct proveedores.nombre 
+from proveedores 
+join productos_proveedores on proveedores.id_prov = productos_proveedores.id_prov 
+join productos on productos.numero_producto = productos_proveedores.numero_producto
+where productos.nombre like 'V%' and productos.numero_producto not in (select numero_producto from detalles_pedidos);
+
+42.
+select nombre from clientes where id_cliente in (select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Bike%')))
+intersect
+select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Casco%'))));
+
+
+
+43.
+select nombre from clientes where id_cliente in (select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Bike%')))
+minus
+select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Casco%'))));
+
+
+44.
+select nombre from clientes where id_cliente in (select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Bike%')))
+union
+select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Casco%'))));
+
+45.
+select id_cliente from clientes where ciudad not in (select ciudad from empleados);
+
+46.
+select nombre from clientes where id_cliente in ((select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Bike%')))) 
+union
+select id_cliente from clientes where id_cliente in
+(select id_cliente from pedidos where numero_pedido in (select numero_pedido from detalles_pedidos where numero_producto in 
+(select numero_producto from productos where nombre like '%Casco%'))));
