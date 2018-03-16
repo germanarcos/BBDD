@@ -1,0 +1,97 @@
+1.
+create view DEP30 as 
+    select *
+    from emple 
+    where dept_no = 30;
+
+2.
+create or replace view DEP30 as 
+    select emp_no as "NUMERO EMPLEADO", apellido, oficio, dir as "DIRECCION", fecha_alt as "FECHA ALTA", salario, comision, dept_no as "NUMERO DEPARTAMENTO"
+    from emple 
+    where dept_no = 30
+    with check option
+;
+
+3.
+create view VDEP as
+	select dept_no , dnombre from depart
+	with check option;
+
+update vdep 
+    set dnombre = 'nuevo 20' 
+    where dept_no = 20;
+
+4.
+create view vista4 as 
+	select emp_no, apellido, dept_no, dnombre 
+	from emple natural join depart
+	with check option
+;
+
+5.
+create view pagos as
+  select INITCAP(apellido) as "NOMBRE", salario as SAL_MES, (salario*12) as SAL_AN, dept_no
+  from emple
+  with check option;
+
+alter table emple modify apellido varchar2(20);
+
+6.
+create view vmedia as
+	select dept_no, dnombre, avg(salario) as "Salario Medio", max(salario) as "Salario Maximo"
+	from emple natural join depart
+	group by dept_no, dnombre;
+
+7.
+"Antes ha habido que otorgar permisos para crear synonym al user, desde la conexion system"
+create synonym DEPARTAMENTOS for DEPART;
+
+8.
+create synonym Conser for VMEDIA;
+Select * from conser;
+
+9.
+create user administrador
+identified by "admin"
+DEFAULT TABLESPACE USERS
+TEMPORARY TABLESPACE TEMP
+QUOTA 500 ON USERS;
+select * from all_users;
+
+10.
+No tiene el privilegio CREATE SESSION, por tanto no puede crear una nueva conexion
+
+12.
+grant create session to administrador;
+
+13.
+alter user administrador identified by admi;
+
+14.
+alter user administrador account lock;
+
+15.
+(desde System)
+alter user administrador account unlock; 
+
+(desde administrador)
+create user prueba00
+identified by prueba00
+default tablespace users
+temporary tablespace temp
+quota 500K on users;
+
+No se puede, no hay permiso para crear usuarios.
+
+16.
+(desde System)
+grant create user to administrador;
+
+(desde administrador)
+create user prueba00
+identified by prueba00
+default tablespace users
+temporary tablespace temp
+quota 500K on users;
+
+Si se puede crear un usuario
