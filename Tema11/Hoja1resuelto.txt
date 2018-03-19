@@ -95,3 +95,68 @@ temporary tablespace temp
 quota 500K on users;
 
 Si se puede crear un usuario
+
+17.
+create user prueba1
+identified by prueba1
+default tablespace users;
+
+grant connect to prueba1;
+
+create table prueba (prueba varchar(20));
+No se puede crear la tabla, porque no tiene privilegios suficientes.
+grant create table to prueba1;
+
+create table prueba (prueba varchar(20));
+
+No deja crear la tabla porque no tiene privilegios en tablespace USERS
+
+18.
+alter user prueba1
+identified by prueba1
+quota 500K on users;
+(Ahora si se puede crear una tabla)
+
+19.
+alter user prueba1
+identified by pru1;
+
+grant alter user to prueba1;
+0
+
+20.
+create user ora1
+identified by ora1
+default tablespace users
+temporary tablespace temp
+quota 500K on users;
+
+grant connect to ;
+grant create table to ora1;
+
+insert into tabla values ('Patatas');
+Puede conectarse a la base de datos, crear una tabla, añadir registros....
+
+21.
+(Como system)
+grant drop user to administrador;
+(como administrador)
+drop user ora1 cascade;
+
+22.
+select * 
+from dba_sys_privs 
+where privilege = 'CREATE USER';
+La opcion admin option si está activa permite al usuario otorgar el privilegio a otros usuarios.
+
+23.
+select * 
+from dba_sys_privs 
+where privilege = 'CREATE SESSION';
+
+24.
+alter user hr
+identified by hr
+account unlock;
+
+25.
