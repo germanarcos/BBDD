@@ -1,0 +1,18 @@
+DECLARES
+	v_ nombre varibable (TIPO)
+	para usar el mismo tipo que se utiliza en una columna se escribe: tabla.columna%TYPE
+
+	BEGIN
+	SQL
+		EXCEPTION
+		(posibilidad de generar diferentes errores y asociarles un mensaje)
+		-particular	-sin datos
+		-			-más registros
+		-			-otros
+		-
+		-general
+END
+
+
+A la hora de asignar valores a una variable hay que usar :=
+: Sirve para distinguir la asignación de valor a una variable de una comparación
