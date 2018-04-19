@@ -1,0 +1,121 @@
+1.
+
+CREATE OR REPLACE
+PROCEDURE pedido_ap_cliente
+AS
+  CURSOR curs1
+  IS
+    SELECT apellidos,
+      fecha_pedido,
+      numero_pedido
+    FROM clientes NATURAL
+    JOIN pedidos
+    ORDER BY apellidos;
+  v_apellidos clientes.apellidos%TYPE;
+  v_fecha_pedido pedidos.fecha_pedido%TYPE;
+  v_numero_pedido pedidos.numero_pedido%TYPE;
+BEGIN
+  OPEN curs1;
+  LOOP
+    FETCH curs1 INTO v_apellidos, v_fecha_pedido, v_numero_pedido;
+    EXIT
+  WHEN curs1%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE(v_apellidos || '*' || v_fecha_pedido || '*' || v_numero_pedido);
+  END LOOP;
+  CLOSE curs1;
+END;
+
+
+2.
+
+CREATE OR REPLACE
+PROCEDURE categoria_descr_numProd
+AS
+  CURSOR curs1
+  IS
+    SELECT categorias.descripcion,
+      COUNT(*)
+    FROM productos
+    JOIN categorias USING (id_categoria)
+    GROUP BY categorias.descripcion;
+  v_descripcion categorias.descripcion%TYPE;
+  v_numero NUMBER;
+BEGIN
+  OPEN curs1;
+  LOOP
+    FETCH curs1 INTO v_descripcion, v_numero;
+    EXIT WHEN curs1%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE(v_descripcion || chr(9) || v_numero ||' productos');
+  END LOOP;
+  CLOSE curs1;
+END;
+
+
+3.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio3 (cadena varchar2)
+AS
+  v_contador NUMBER;
+  v_apellidos empleados.apellidos%TYPE;
+  v_id_empleado empleados.id_empleado%TYPE;
+  CURSOR curs1
+  IS
+    SELECT apellidos, id_empleado FROM empleados WHERE apellidos LIKE '%'||cadena||'%';
+BEGIN
+DBMS_OUTPUT.PUT_LINE('Apellidos     Id empleado');
+  OPEN curs1;
+  LOOP
+    FETCH curs1 INTO v_apellidos, v_id_empleado;
+    EXIT
+  WHEN curs1%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE(v_apellidos || '          ' ||v_id_empleado);
+  END LOOP;
+  CLOSE curs1;
+END;
+
+4.
+//REVISAR
+SELECT apellidos,
+  suma
+FROM
+  (SELECT SUM(precio_total) AS suma,
+    apellidos,
+    id_cliente
+  FROM clientes NATURAL
+  JOIN pedidos
+  GROUP BY apellidos,
+    id_cliente
+  ORDER BY SUM(precio_total) DESC
+  )
+WHERE rownum <=5;
+CREATE OR REPLACE
+PROCEDURE ejercicio5
+AS
+  CURSOR cursor1
+  IS
+    SELECT apellidos,
+      suma
+    FROM
+      (SELECT SUM(precio_total) AS suma,
+        apellidos,
+        id_cliente
+      FROM clientes NATURAL
+      JOIN pedidos
+      GROUP BY apellidos,
+        id_cliente
+      ORDER BY SUM(precio_total) DESC
+      )
+  WHERE rownum <=5;
+  v_apellidos clientes.apellidos%TYPE;
+  v_suma pedidos.precio_total%TYPE;
+BEGIN
+  OPEN cursor1;
+  LOOP
+    FETCH cursor1 INTO v_apellidos, v_suma;
+    EXIT
+  WHEN cursor1%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE(v_apellidos || '          ' ||v_suma);
+  END LOOP;
+  CLOSE cursor1;
+END;
