@@ -75,22 +75,8 @@ DBMS_OUTPUT.PUT_LINE('Apellidos     Id empleado');
 END;
 
 4.
-//REVISAR
-SELECT apellidos,
-  suma
-FROM
-  (SELECT SUM(precio_total) AS suma,
-    apellidos,
-    id_cliente
-  FROM clientes NATURAL
-  JOIN pedidos
-  GROUP BY apellidos,
-    id_cliente
-  ORDER BY SUM(precio_total) DESC
-  )
-WHERE rownum <=5;
 CREATE OR REPLACE
-PROCEDURE ejercicio5
+PROCEDURE ejercicio4
 AS
   CURSOR cursor1
   IS
@@ -108,7 +94,7 @@ AS
       )
   WHERE rownum <=5;
   v_apellidos clientes.apellidos%TYPE;
-  v_suma pedidos.precio_total%TYPE;
+  v_suma number;
 BEGIN
   OPEN cursor1;
   LOOP
@@ -119,3 +105,105 @@ BEGIN
   END LOOP;
   CLOSE cursor1;
 END;
+5.
+
+CREATE OR REPLACE
+PROCEDURE EJERCICIO6
+AS
+  v_categoria categorias.id_categoria%TYPE;
+  v_producto productos.numero_producto%TYPE;
+  v_cat categorias.id_categoria%TYPE;
+  CURSOR categoria
+  IS
+    SELECT id_categoria FROM categorias;
+  CURSOR curs1
+  IS
+    SELECT numero_producto,
+      categoria
+    FROM
+      (SELECT numero_producto,
+        SUM(cantidad) AS suma,
+        id_categoria  AS categoria
+      FROM productos j NATURAL
+      JOIN detalles_pedidos
+      GROUP BY numero_producto,
+        id_categoria
+      ORDER BY id_categoria,
+        suma
+      )
+  WHERE rownum <=2
+  AND categoria = v_categoria;
+BEGIN
+  dbms_output.put_line('Numero de producto    ID_CATEGORIA');
+  OPEN categoria;
+  LOOP
+    FETCH categoria INTO v_categoria;
+    EXIT
+  WHEN categoria%notfound;
+    OPEN curs1;
+    LOOP
+      FETCH curs1 INTO v_producto, v_cat;
+      EXIT
+    WHEN curs1%notfound;
+      dbms_output.put_line(v_producto ||'                     ' || v_cat);
+    END LOOP;
+    CLOSE curs1;
+  END LOOP;
+  CLOSE categoria;
+END;
+
+6.
+
+
+CREATE OR REPLACE
+PROCEDURE ejercicio6
+AS
+  CURSOR curs1
+  IS
+    SELECT nombre,
+      precio_venta,
+      id_categoria,
+      stock
+    FROM productos
+    ORDER BY id_categoria;
+  --Variables que almacenan el precio de venta de los productos y su nombre
+  v_precio_venta productos.precio_venta%TYPE;
+  v_nombre productos.nombre%TYPE;
+  --Variables que almacenan suma de valores
+  v_valor_categoria NUMBER:=0;
+  v_valor_total     NUMBER:=0;
+  --Variables de numero de productos
+  v_numero_pro_categoria NUMBER:=0;
+  v_numero_total_pro     NUMBER:=0;
+  --Variables que almacenan categoria actual y categoria de producto
+  v_categoria_actual productos.id_categoria%TYPE;
+  v_id_categoria productos.id_categoria%TYPE;
+  --Variable que almacena el stock del producto actual
+  v_stock productos.stock%TYPE;
+BEGIN
+  v_categoria_actual:=1;
+  OPEN curs1;
+  LOOP
+    FETCH curs1 INTO v_nombre, v_precio_venta, v_id_categoria, v_stock;
+    IF v_id_categoria    != v_categoria_actual OR curs1%NOTFOUND THEN
+      v_valor_total      := v_valor_total      + v_valor_categoria;
+      v_numero_total_pro := v_numero_total_pro + v_numero_pro_categoria;
+      DBMS_OUTPUT.PUT_LINE('Categoria: ' || v_categoria_actual);
+      DBMS_OUTPUT.PUT_LINE('            Número total de productos:' || v_numero_pro_categoria);
+      DBMS_OUTPUT.PUT_LINE('            Valor total de productos:' || v_valor_categoria || '€');
+      v_valor_categoria      :=0;
+      v_numero_pro_categoria := 0;
+      v_categoria_actual     := v_id_categoria;
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('Producto:      '|| v_nombre || '     '||v_precio_venta||'€');
+    v_numero_pro_categoria:= v_numero_pro_categoria + 1;
+    v_valor_categoria     := v_valor_categoria      + (v_precio_venta * v_stock);
+    EXIT
+  WHEN curs1%NOTFOUND;
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('NUMERO TOTAL DE PRODUCTOS:' ||v_numero_total_pro);
+  DBMS_OUTPUT.PUT_LINE('VALOR TOTAL DE PRODUCTOS:' ||v_valor_total||'€');
+END;
+
+7.
+
