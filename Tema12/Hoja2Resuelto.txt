@@ -195,9 +195,11 @@ BEGIN
       v_numero_pro_categoria := 0;
       v_categoria_actual     := v_id_categoria;
     END IF;
-    DBMS_OUTPUT.PUT_LINE('Producto:      '|| v_nombre || '     '||v_precio_venta||'€');
-    v_numero_pro_categoria:= v_numero_pro_categoria + 1;
-    v_valor_categoria     := v_valor_categoria      + (v_precio_venta * v_stock);
+    IF NOT curs1%NOTFOUND THEN
+      DBMS_OUTPUT.PUT_LINE('Producto:      '|| v_nombre || '     '||v_precio_venta||'€');
+      v_numero_pro_categoria:= v_numero_pro_categoria + 1;
+      v_valor_categoria     := v_valor_categoria      + (v_precio_venta * v_stock);
+    END IF;
     EXIT
   WHEN curs1%NOTFOUND;
   END LOOP;
@@ -205,5 +207,209 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('VALOR TOTAL DE PRODUCTOS:' ||v_valor_total||'€');
 END;
 
+
 7.
 
+CREATE OR REPLACE
+PROCEDURE ejercicio7(
+    descripcion VARCHAR2)
+AS
+  v_id_cat categorias.id_categoria%TYPE;
+BEGIN
+  SELECT numero - MOD(numero,10) + 10
+  INTO v_id_cat
+  FROM
+    ( SELECT MAX(id_categoria) AS numero FROM categorias
+    );
+  INSERT INTO categorias VALUES
+    (v_id_cat, descripcion
+    );
+EXCEPTION
+WHEN OTHERS THEN
+  raise_application_error(-20000, 'Error en la aplicación');
+END;
+
+8.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio8(
+    numero         NUMBER,
+    nombre         VARCHAR2 := NULL,
+    descripcion    VARCHAR2 :=NULL,
+    precio_venta   NUMBER   :=0,
+    stock          NUMBER   :=0,
+    v_id_categoria NUMBER   :=0)
+AS
+  ERR_STOCK  EXCEPTION;
+  ERR_PRECIO EXCEPTION;
+  v_categorias categorias%ROWTYPE;
+BEGIN
+  SELECT *
+  INTO v_categorias
+  FROM categorias
+  WHERE id_categoria = v_id_categoria;
+  IF(precio_venta   <=0) THEN
+    raise err_precio;
+  END IF;
+  IF (stock < 0) THEN
+    raise err_stock;
+  END IF;
+  INSERT
+  INTO productos VALUES
+    (
+      numero,
+      nombre,
+      descripcion,
+      precio_venta,
+      stock,
+      v_id_categoria
+    );
+EXCEPTION
+WHEN no_data_found THEN
+  raise_application_error(-20004,'La categoria no existe');
+WHEN err_stock THEN
+  raise_application_error(-20003,'El stock no puede ser menor de 0');
+WHEN err_precio THEN
+  raise_application_error(-20002,'El precio no puede ser menor de 0');
+WHEN dup_val_on_index THEN
+  raise_application_error(-20001,'Ya existe un producto con ese numero');
+WHEN OTHERS THEN
+  raise_application_error(-20000, 'Error en la aplicación');
+END;
+s
+9.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio9(
+    categoria  NUMBER,
+    importe    NUMBER,
+    porcentaje NUMBER)
+AS
+  v_precio           NUMBER;
+  v_precioimporte    NUMBER;
+  v_precioporcentaje NUMBER;
+  CURSOR prod
+  IS
+    SELECT precio_venta FROM productos WHERE id_categoria=categoria FOR UPDATE;
+BEGIN
+  OPEN prod;
+  FETCH prod INTO v_precio;
+  WHILE prod%FOUND
+  LOOP
+    v_precioporcentaje := v_precio*((100+porcentaje)/100);
+    v_precioimporte    := v_precio+ importe;
+    IF(v_precioimporte  >v_precioporcentaje) THEN
+      UPDATE productos SET precio_venta=v_precioimporte WHERE CURRENT OF prod;
+    ELSE
+      UPDATE productos SET precio_venta=v_precioporcentaje WHERE CURRENT OF prod;
+    END IF;
+    FETCH prod INTO v_precio;
+  END LOOP;
+  CLOSE prod;
+END;
+
+10.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio10(
+    categoria  NUMBER,
+    importe    NUMBER,
+    porcentaje NUMBER)
+AS
+  v_precio           NUMBER;
+  v_precioimporte    NUMBER;
+  v_precioporcentaje NUMBER;
+  CURSOR prod
+  IS
+    SELECT precio_venta FROM productos WHERE id_categoria=categoria FOR UPDATE;
+BEGIN
+  OPEN prod;
+  FETCH prod INTO v_precio;
+  WHILE prod%FOUND
+  LOOP
+    v_precioporcentaje := v_precio*((100+porcentaje)/100);
+    v_precioimporte    := v_precio+ importe;
+    IF(v_precioimporte  >v_precioporcentaje) THEN
+      UPDATE productos SET precio_venta=v_precioimporte WHERE CURRENT OF prod;
+    ELSE
+      UPDATE productos SET precio_venta=v_precioporcentaje WHERE CURRENT OF prod;
+    END IF;
+    FETCH prod INTO v_precio;
+  END LOOP;
+  CLOSE prod;
+END;
+
+11.
+CREATE OR REPLACE
+PROCEDURE ejercicio11(
+    categoria  NUMBER,
+    porcentaje NUMBER)
+AS
+  v_precioporcentaje NUMBER;
+  CURSOR prod
+  IS
+    SELECT precio_venta,
+      rowid
+    FROM productos
+    WHERE id_categoria=categoria FOR UPDATE;
+    v_cursor prod%ROWTYPE;
+BEGIN
+  OPEN prod;
+  FETCH prod INTO v_cursor;
+  WHILE prod%FOUND
+  LOOP
+    v_precioporcentaje := v_cursor.precio_venta*((100+porcentaje)/100);
+    UPDATE productos SET precio_venta=v_precioporcentaje WHERE rowid=v_cursor.rowid;
+    FETCH prod INTO v_cursor;
+  END LOOP;
+  CLOSE prod;
+END;
+
+12.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio12
+AS
+  v_precio_medio productos.precio_venta%TYPE;
+  v_subida       productos.precio_venta%TYPE;
+  v_categoria productos.id_categoria%TYPE;
+  v_nuevo_precio productos.precio_venta%TYPE;
+  CURSOR prod
+  IS
+    SELECT precio_venta,
+      rowid
+    FROM productos
+    WHERE id_categoria = v_categoria FOR UPDATE;
+  v_cursor prod%ROWTYPE;
+  CURSOR categorias
+  IS
+    SELECT id_categoria FROM productos group by id_categoria order by id_categoria;
+BEGIN
+  OPEN categorias;
+  FETCH categorias INTO v_categoria;
+  WHILE categorias%FOUND
+  LOOP
+    SELECT AVG(precio_venta)
+    INTO v_precio_medio
+    FROM productos
+    WHERE id_categoria = v_categoria;
+    dbms_output.put_line(v_precio_medio);
+    OPEN prod;
+    FETCH prod INTO v_cursor;
+    WHILE prod%FOUND
+    LOOP
+      IF (v_precio_medio > v_cursor.precio_venta) THEN
+        v_subida        := v_precio_medio - v_cursor.precio_venta;
+        v_subida        := v_subida       *50/100;
+        v_nuevo_precio := v_cursor.precio_venta + v_subida;
+        UPDATE productos
+        SET precio_venta = v_nuevo_precio
+        WHERE rowid      =v_cursor.rowid;
+      END IF;
+    FETCH prod INTO v_cursor;
+    END LOOP;
+    CLOSE prod;
+    FETCH categorias INTO v_categoria;
+  END LOOP;
+  CLOSE categorias;
+END;
