@@ -413,3 +413,88 @@ BEGIN
   END LOOP;
   CLOSE categorias;
 END;
+
+13.
+
+CREATE OR REPLACE
+PROCEDURE ejercicio13
+AS
+  CURSOR pedido
+  IS
+    SELECT numero_pedido,
+      fecha_pedido,
+      fecha_envio,
+      id_cliente,
+      id_empleado,
+      precio_total
+    FROM pedidos NATURAL
+    JOIN clientes
+    ORDER BY apellidos;
+  v_cursor pedido%ROWTYPE;
+  v_ap_cliente clientes.apellidos%TYPE;
+  v_ap_empl empleados.apellidos%TYPE;
+  v_nombre_prod productos.nombre%TYPE;
+  v_idcliente_actual clientes.id_cliente%TYPE;
+  v_coste_pedido    NUMBER;
+  v_importe_cliente NUMBER:=0;
+  v_importe_total   NUMBER:=0;
+  v_numero_lineas   NUMBER;
+  CURSOR detalles
+  IS
+    SELECT * FROM detalles_pedidos WHERE numero_pedido = v_cursor.numero_pedido;
+  v_detalles detalles%ROWTYPE;
+BEGIN
+  dbms_output.put_line('******************************');
+  OPEN pedido;
+  FETCH pedido INTO v_cursor;
+  WHILE pedido%FOUND
+  LOOP
+    v_numero_lineas:=0;
+    v_coste_pedido :=0;
+    SELECT apellidos
+    INTO v_ap_cliente
+    FROM clientes
+    WHERE id_cliente    = v_cursor.id_cliente;
+    v_idcliente_actual := v_cursor.id_cliente;
+    SELECT apellidos
+    INTO v_ap_empl
+    FROM empleados
+    WHERE id_empleado = v_cursor.id_empleado;
+    dbms_output.put_line('Datos del pedido:       Cliente: '|| v_ap_cliente ||'       Empleado que atendió: ' || v_ap_empl || '    Fecha: ' || v_cursor.fecha_pedido);
+    OPEN detalles;
+    FETCH detalles INTO v_detalles;
+    WHILE detalles%FOUND
+    LOOP
+      SELECT nombre
+      INTO v_nombre_prod
+      FROM productos
+      WHERE numero_producto = v_detalles.numero_producto;
+      dbms_output.put_line('Nombre de producto: ' || v_nombre_prod || '   Unidades pedidas: ' ||v_detalles.cantidad || '  Precio por unidad: ' || v_detalles.precio ||'€');
+      FETCH detalles INTO v_detalles;
+      v_numero_lineas := v_numero_lineas + 1;
+    END LOOP;
+    dbms_output.put_line('Numero de líneas del pedido: ' || v_numero_lineas);
+    dbms_output.put_line('Importe total del pedido: ' ||v_cursor.precio_total||'€');
+    v_importe_cliente := v_importe_cliente + v_cursor.precio_total;
+    v_importe_total   := v_importe_total   + v_cursor.precio_total;
+    CLOSE detalles;
+    dbms_output.put_line('');
+    dbms_output.put_line('______________________________');
+    FETCH pedido INTO v_cursor;
+    IF(v_cursor.id_cliente != v_idcliente_actual) THEN
+      dbms_output.put_line('--------------');
+      dbms_output.put_line('Importe total de todos los pedidos del cliente: ' ||v_importe_cliente||'€');
+      dbms_output.put_line('______________');
+      v_importe_cliente  := 0;
+      v_idcliente_actual := v_cursor.id_cliente;
+    END IF;
+  END LOOP;
+  dbms_output.put_line('--------------');
+  dbms_output.put_line('Importe total de todos los pedidos del cliente: ' ||v_importe_cliente||'€');
+  dbms_output.put_line('______________');
+  CLOSE pedido;
+  dbms_output.put_line('Importe total de todos los pedidos: ' ||v_importe_total||'€');
+  dbms_output.put_line('******************************');
+END;
+
+14.
