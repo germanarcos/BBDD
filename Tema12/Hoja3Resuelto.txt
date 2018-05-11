@@ -1,0 +1,100 @@
+1.
+
+CREATE OR REPLACE TRIGGER Tri1 before
+  INSERT OR
+  DELETE OR
+  UPDATE ON categorias FOR EACH row DECLARE BEGIN IF inserting THEN
+  INSERT INTO auditacategorias VALUES
+    (sysdate, :new.id_categoria, 'Insert',''
+    );
+elsif deleting THEN
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :old.id_categoria ,
+      'Delete',
+      ''
+    );
+elsif updating THEN
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :old.id_categoria ,
+      'Update',
+      ''
+    );
+END IF;
+END;
+
+
+
+2.
+
+CREATE OR REPLACE TRIGGER Tri2 before
+  INSERT OR
+  DELETE OR
+  UPDATE ON categorias FOR EACH row DECLARE BEGIN IF inserting THEN
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :NEW.id_categoria ,
+      'Insert',
+      :NEW.descripcion
+    );
+elsif deleting THEN
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :OLD.id_categoria ,
+      'Delete',
+      :OLD.descripcion
+    );
+elsif updating THEN
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :OLD.id_categoria ,
+      'Update',
+      :OLD.descripcion
+    );
+  INSERT
+  INTO auditacategorias VALUES
+    (
+      sysdate,
+      :NEW.id_categoria ,
+      'Update',
+      :NEW.descripcion
+    );
+END IF;
+END;
+
+
+
+3.
+
+CREATE OR REPLACE
+  FUNCTION seq_id_cliente
+    RETURN NUMBER
+  AS
+    v_id clientes.id_cliente%TYPE;
+  BEGIN
+    SELECT MAX(id_cliente) INTO v_id FROM clientes;
+    v_id := v_id + 1;
+    RETURN v_id;
+  END;
+
+
+CREATE OR REPLACE TRIGGER tri3 AFTER
+  INSERT ON clientes DECLARE v_cliente clientes.id_cliente%TYPE; v_usuario string(30); BEGIN v_cliente := seq_id_cliente();
+  v_usuario := user;
+  UPDATE clientes
+  SET fecha_modificacion = sysdate,
+    tipo_modificacion    ='Insert',
+    modificado_por       = v_usuario
+  WHERE id_cliente       = id_cliente;
+END;

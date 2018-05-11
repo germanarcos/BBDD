@@ -1,0 +1,7 @@
+drop table auditacategorias;
+create table AUDITACATEGORIAS (
+ FECHA        date not null,
+ id_categoria NUMBER (38, 0), 
+ operacion    VARCHAR2(20),
+ datos        VARCHAR2(200), 
+;

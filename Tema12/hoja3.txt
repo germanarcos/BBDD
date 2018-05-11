@@ -1,0 +1,29 @@
+﻿------Trigger 1
+CREATE OR REPLACE TRIGGER TRIGGER_EJERCICIO2
+  AFTER INSERT OR DELETE 
+  ON CATEGORIAS
+  FOR EACH ROW
+BEGIN
+IF DELETING THEN
+  INSERT INTO AUDITACATEGORIAS
+  VALUES ( CURRENT_DATE, :OLD.ID_CATEGORIA,'BORRADO','Se ha borrado la categoria: '|| :OLD.DESCRIPCION );
+  DBMS_OUTPUT.PUT_LINE('Cambio registrado correctamente');
+ELSIF INSERTING THEN
+  INSERT INTO AUDITACATEGORIAS
+  VALUES ( CURRENT_DATE, :NEW.ID_CATEGORIA,'INSERTADO','Se ha INSERTADO la categoria: '|| :NEW.DESCRIPCION );
+  DBMS_OUTPUT.PUT_LINE('Cambio registrado correctamente');
+END IF;
+END;
+
+----Trigger 2
+create or replace 
+trigger ejercicio2_hoja3
+AFTER Update
+ON categorias
+FOR EACH ROW
+BEGIN
+if updating then
+insert into auditacategorias
+values (sysdate,:new.id_categoria,'Actualizado',:old.id_categoria||','||:new.id_categoria||','||:old.descripcion||','||:new.descripcion);
+end if;
+END;
