@@ -1,0 +1,161 @@
+create table AUDITACATEGORIAS(fecha VARCHAR2(20),id_categoria VARCHAR2(10),tipo_operacion VARCHAR2(50));
+
+create or replace trigger t_audita_categorias
+    after 
+    insert or delete on categorias
+    for each row
+    BEGIN
+    
+    if inserting then
+    insert into auditacategorias values(to_char(sysdate,'DD/MM/YY*HH24:MI*'),:new.id_categoria ,'INSERCIÓN*');
+    
+    elsif deleting then
+    insert into auditacategorias values(to_char(sysdate,'DD/MM/YY*HH24:MI*'),:old.id_categoria,'BORRADO*');
+    
+    end if;
+    END;
+   
+ALTER TABLE auditacategorias
+add datos varchar2(200);
+
+
+CREATE OR REPLACE TRIGGER t_update_categorias
+    after update on categorias for each row
+BEGIN
+    if updating then
+        if :old.id_categoria != :new.id_categoria and :old.descripcion != :new.descripcion then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+                'ID anterior: ' || :old.id_categoria || ', cambiado por ' || :new.id_categoria ||
+                '   y   Descripción anterior: ' || :old.descripcion || ' por ' || :new.descripcion);
+        elsif :old.id_categoria != :new.id_categoria then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+                'ID anterior: ' || :old.id_categoria || ', cambiado por ' || :new.id_categoria);
+        elsif :old.descripcion != :new.descripcion then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+                'Descripción anterior: ' || :old.descripcion || ' por ' || :new.descripcion);
+        end if;
+end if; --fin updating
+END;
+
+(EXTENSION Bundle EJERCICIO 1+2)
+
+CREATE OR REPLACE TRIGGER t_update_categorias
+    after update on categorias for each row
+BEGIN
+    if updating then
+        if :old.id_categoria != :new.id_categoria and :old.descripcion != :new.descripcion then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+                'ID anterior: ' || :old.id_categoria || ', cambiado por ' || :new.id_categoria ||
+                '   y   Descripción anterior: ' || :old.descripcion || ' por ' || :new.descripcion);
+        elsif :old.id_categoria != :new.id_categoria then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+
+                'ID anterior: ' || :old.id_categoria || ', cambiado por ' || :new.id_categoria);
+        elsif :old.descripcion != :new.descripcion then
+            INSERT INTO auditacategorias
+                VALUES ((to_char(SYSDATE, 'DD/MM/YY*HH24:MI')), :new.id_categoria , '*MODIFICACION',
+                'Descripción anterior: ' || :old.descripcion || ' por ' || :new.descripcion);
+        end if;
+    elsif inserting then
+        insert into auditacategorias
+            values (to_char(SYSDATE, 'DD/MM/YY*HH24:MI'), :new.id_categoria , '*INSERCION',
+                '-- Añadido: ' || :new.id_categoria || ' y ' || :new.descripcion ); 
+    elsif deleting then
+        insert into auditacategorias
+            values (to_char(SYSDATE, 'DD/MM/YY*HH24:MI'), :old.id_categoria , '*BORRADO',
+                '-- Borrado: ' || :old.id_categoria || ' y ' || :old.descripcion );  
+    end if; --fin updating
+END;
+
+3.
+ALTER TABLE CLIENTES add(
+fecha_modificacion date,
+tipo_modificacion varchar2(30),
+modificado_por varchar2(30));
+
+
+
+DECLARE
+    v_id number;
+BEGIN
+    select max(id_cliente)+1 into v_id
+    from clientes;
+execute immediate 'create sequence seq_id_cliente
+    INCREMENT BY 1
+    START WITH ' || v_id;
+END;
+
+
+create or replace trigger trigger_ejercicio3
+before insert on clientes
+for each row
+begin
+    :new.tipo_modificacion := 'INSERCION';
+    :new.fecha_modificacion := SYSDATE;
+    :new.modificado_por := USER;
+    :new.id_cliente := SEQ_ID_CLIENTE.NEXTVAL;
+    
+end;
+
+4.
+
+create or replace trigger trigger_ejercicio4
+before insert or update on clientes
+for each row
+begin
+if inserting then
+
+
+    :new.tipo_modificacion := 'INSERCION';
+    :new.fecha_modificacion := SYSDATE;
+    :new.modificado_por := USER;
+    :new.id_cliente := SEQ_ID_CLIENTE.NEXTVAL;
+    
+elsif updating then
+    :new.tipo_modificacion := 'ACTUALIZACION';
+    :new.fecha_modificacion := SYSDATE;
+    :new.modificado_por := USER;
+    
+
+
+end if;
+end;
+
+5.
+
+create or replace trigger t_ejercicio5
+before insert on clientes
+for each row
+declare 
+
+cursor curpob1
+is
+    select cod_postal from poblaciones where cod_postal = :new.cod_postal;
+    vreg_curpob1 curpob1%rowtype;
+    
+    NOHAYCODIGOPOSTAL EXCEPTION;
+begin
+    open curpob1;
+    fetch curpob1 into vreg_curpob1;
+        if curpob1%notfound then
+        raise NOHAYCODIGOPOSTAL;
+        end if;
+  
+end t_ejercicio5;
+** PARTE 2 **
+create or replace trigger t_ejercicio5
+after insert on clientes
+for each row
+declare 
+
+var_cod poblaciones.cod_postal%type;
+begin
+    select distinct cod_postal into var_cod from poblaciones
+    where cod_postal = :new.cod_postal;
+  
+end t_ejercicio5;
