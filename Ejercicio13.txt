@@ -1,0 +1,63 @@
+create or replace PROCEDURE listado_Ingresos
+AS
+	CURSOR cur_dat IS
+ 	select id_cliente,numero_pedido, c.apellidos,e.apellidos as empleapell, fecha_pedido,
+        pr.nombre, d.cantidad, d.precio, precio_total
+		from clientes c join pedidos  using (id_cliente) 
+		join empleados e using (id_empleado)
+		join detalles_pedidos d using (numero_pedido)
+		join productos pr using(numero_producto)
+		order by c.apellidos, id_cliente, numero_pedido;
+
+	v_lineas_pedido 	NUMBER(9) DEFAULT 0;-- contar las líneas de cada pedido
+	v_importe_total_pedido 	NUMBER(9) default 0;--guardar el importe de cada pedido
+	v_total_cliente 	NUMBER(10) default 0;--guardar el importe total de los pedidos del cliente
+    v_total_pedidos  NUMBER(20)default 0;--guardar el importe de todos los pedidos de todos los clientes
+	v_aux_id_cliente clientes.id_cliente%type DEFAULT 0;
+	v_aux_num_pedido pedidos.numero_pedido%TYPE DEFAULT 0;
+  vreg_pedido cur_dat%ROWTYPE;
+        
+BEGIN
+    v_total_pedidos:=0;--es el de todos los pedidos de la empresa
+    open cur_dat;
+    fetch cur_dat into vreg_pedido;
+    while cur_dat%found loop -- hacemos un bucle porque queremos un montón de filas. Mientras haya datos...
+      DBMS_OUTPUT.PUT_LINE('*************************************');
+       v_aux_id_cliente:= vreg_pedido.id_cliente; -- reservamos el id cliente en v_aux_id_cliente
+        v_total_cliente:=0; 
+        dbms_output.put_line('Cliente: ' || vreg_pedido.apellidos);
+
+
+        while cur_dat%found and v_aux_id_cliente=vreg_pedido.id_cliente loop --mientras haya datos y esté con el mismo cliente
+             v_aux_num_pedido:=vreg_pedido.numero_pedido;-- reservamos el num_pedido de pedido e inicializamos contadores
+             v_importe_total_pedido:=0;  v_lineas_pedido:=0;
+              DBMS_OUTPUT.PUT_LINE(' Datos del pedido : '|| v_aux_num_pedido || '  Empleado que atendió:  ' || vreg_pedido.empleapell || ' Fecha: '||vreg_pedido.fecha_pedido );
+             --mientras haya datos y esté con el mismo cliente y esté con el mismo pedido
+             
+		while cur_dat%found and v_aux_id_cliente=vreg_pedido.id_cliente and v_aux_num_pedido=vreg_pedido.numero_pedido LOOP                  
+                    v_lineas_pedido:=v_lineas_pedido+1;
+                    v_importe_total_pedido:= v_importe_total_pedido + vreg_pedido.precio*vreg_pedido.cantidad;
+                    --mostramos todo lo que queremos del cliente y el mismo pedido
+                    DBMS_output.Put_line('Nombre del producto: '|| vreg_pedido.nombre || ' unidades pedidas: ' || vreg_pedido.cantidad 
+                          || ' precio por unidad_:' || vreg_pedido.precio);
+                     DBMS_OUTPUT.PUT_LINE('-------Fin producto-----------');
+                     fetch cur_dat into vreg_pedido;
+              END LOOP; -- suponemos que sale porque cambia de pedido
+            v_total_cliente:= v_total_cliente+ v_importe_total_pedido; -- sumamos al total del cliente el total del pedido
+              
+              DBMS_OUTPUT.PUT_LINE(' Número de líneas de pedido: '|| v_lineas_pedido) ;
+              DBMS_OUTPUT.PUT_LINE(' Importe total del pedido: '|| v_importe_total_pedido) ;
+              
+              DBMS_OUTPUT.PUT_LINE('--------fin pedido----------');
+          end loop; -- suponemos que sale porque cambia de cliente
+           DBMS_OUTPUT.PUT_LINE(' Importe total del pedidos del cliente: '|| v_total_cliente) ;
+           DBMS_OUTPUT.PUT_LINE('**************** FIN CLIENTE *********************');
+           v_total_pedidos:=v_total_pedidos +  v_total_cliente; -- --acumulamos al total de la empresa el total del cliente
+              
+         end loop;
+
+        --visualiza el importe total de todos los pedidos de la empresa 
+        DBMS_OUTPUT.PUT_LINE(' Importe total de  los pedidos : '|| v_total_pedidos) ;
+        DBMS_OUTPUT.PUT_LINE('**************** FIN  *********************');  
+  close cur_dat;
+END listado_Ingresos;
